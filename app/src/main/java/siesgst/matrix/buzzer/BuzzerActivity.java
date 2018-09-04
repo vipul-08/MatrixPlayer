@@ -1,5 +1,6 @@
 package siesgst.matrix.buzzer;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,12 +23,14 @@ public class BuzzerActivity extends AppCompatActivity {
 
     TextView teamNameText;
     Button buzzButton;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
 
+        mediaPlayer = MediaPlayer.create(BuzzerActivity.this,R.raw.buzzer);
         teamNameText = findViewById(R.id.teamName);
         buzzButton = findViewById(R.id.buzzButton);
 
@@ -51,6 +54,7 @@ public class BuzzerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new Thread(new UdpSender(teamId,ip)).start();
+                mediaPlayer.start();
             }
         });
     }
@@ -70,7 +74,6 @@ public class BuzzerActivity extends AppCompatActivity {
                 DatagramSocket udpSocket = new DatagramSocket(1111);
                 udpSocket.setReuseAddress(true);
                 InetAddress serverAddress = InetAddress.getByName(ipAdd);
-                //InetAddress serverAddress = InetAddress.getByName(ipAdd);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PrintStream pout = new PrintStream(baos);
                 pout.print(message);
@@ -82,5 +85,11 @@ public class BuzzerActivity extends AppCompatActivity {
                 Log.d("ExceptionHua",e+"");
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.release();
     }
 }
