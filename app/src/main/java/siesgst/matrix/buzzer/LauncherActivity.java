@@ -25,7 +25,7 @@ public class LauncherActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                launcherImage.setImageResource(R.drawable.matrix_logo);
+                launcherImage.setImageResource(R.drawable.impre);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
